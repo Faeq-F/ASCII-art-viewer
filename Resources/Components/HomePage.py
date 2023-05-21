@@ -7,113 +7,76 @@ except ImportError:
 
 from Components import window, canvas, frame, button, center
 
-class ExitProgram():
+class ExitProgram(window):
     def __init__(self, *args):
-        self.window = tk.Tk()
+        window.__init__(self)
         self.window.title("Bye!")
         self.window.geometry("200x100")
-        self.window.resizable(width=False, height=False)
-        self.window["bg"] = "#FFFFFF"
-        self.window.attributes("-topmost", True)
-        self.window.iconbitmap("./Resources/ASCII Art Viewer.ico")
-        
+        center(self.window) # Recenter as geometry changed
 
         C = canvas(self.window, "./Resources/Images/pGoodbye.gif")
         F = frame(self.window)
-        backImage = tk.PhotoImage(file="./Resources/Images/bGoodbye.gif").subsample(8, 8)
-        Button = tk.Button(F, relief="flat", image=backImage, command=self.window.destroy, cursor="target")
-        Button.place(relx=0.2, rely=0.7, anchor=CENTER)
-        Button.image = backImage
-        
-        center(self.window)
-
+        B = button(F, "./Resources/Images/bGoodbye.gif", 8, self.window.destroy, 0.2, 0.7)
 
 class HomePage(window):
     def __init__(self, *args):
         window.__init__(self)
 
-        C = Canvas(self.window)
-        background = PhotoImage(file="./Resources/Images/pHome.gif")
-        background_label = Label(self.window, image=background)
-        background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        C.pack()
-        C.img = background
-
+        C = canvas(self.window, "./Resources/Images/pHome.gif")
         F = frame(self.window)
 
-        menuOption1 = tk.PhotoImage(file="./Resources/Images/bEnterRLE.gif").subsample(3, 3)
-        Button = tk.Button(F, relief=FLAT, image=menuOption1, command=self.Load_RLE_window, bg="#FFFFFF", fg='#FFFFFF', cursor="target")
-        Button.place(relx=0.2, rely=0.59, anchor=CENTER)
-        Button.image = menuOption1
+        B = button(F, "./Resources/Images/bEnterRLE.gif", 3, self.EnterRle, 0.2, 0.59)
+        B = button(F, "./Resources/Images/bDisplayArt.gif", 3, self.DisplayArt, 0.2, 0.65)
+        B = button(F, "./Resources/Images/bConvertToAscii.gif", 3, self.ConvertToAscii, 0.2, 0.705)
+        B = button(F, "./Resources/Images/bConvertToRle.gif", 3, self.ConvertToRle, 0.2, 0.76)
+        B = button(F, "./Resources/Images/bExit.gif", 3, self.close, 0.2, 0.82)
+        
+        AuthorImage = tk.PhotoImage(file="./Resources/Images/Author.gif").subsample(2, 2)
+        AuthorButton = tk.Button(F, image=AuthorImage, command=self.About,
+            text="Program By Faeq Faisal ", bg='#81D3E0', fg="#FFFFFF",
+            font=("Segoe UI Emoji", 10), relief=FLAT, cursor="trek")
+        AuthorButton.place(relx=0.91, rely=0.98, anchor=CENTER)
+        AuthorButton.image = AuthorImage
 
-        menuOption2 = tk.PhotoImage(file="./Resources/Images/bDisplayArt.gif").subsample(3, 3)
-        ButtonToDisplayArt = tk.Button(F, command=self.ASCII_ART_DISPLAY_window,image=menuOption2, bg="#FFFFFF", fg='#FFFFFF', relief=FLAT, cursor="target")
-        ButtonToDisplayArt.place(relx=0.2, rely=0.65, anchor=CENTER)
-        ButtonToDisplayArt.image = menuOption2
+        CheckReadMeNoteImage = tk.PhotoImage(file="./Resources/Images/CheckReadMeNote.gif")
+        CheckReadMeNote = tk.Label(F,image=CheckReadMeNoteImage, background='white')
+        CheckReadMeNote.place(relx=0.28, rely=0.99, anchor=CENTER)
+        CheckReadMeNote.image = CheckReadMeNoteImage
 
-        ConvertAimage = tk.PhotoImage(file="./Resources/Images/bConvertA.gif")
-        ConvertAimagee = ConvertAimage.subsample(3, 3)
-        ButtonToConvertArt = tk.Button(F, image=ConvertAimagee, bg="#FFFFFF",
-                                        fg='#FFFFFF', relief=FLAT, cursor="target", command=self.Convert_ASCII_window)
-        ButtonToConvertArt.place(relx=0.2, rely=0.705, anchor=CENTER)
-        ButtonToConvertArt.image = ConvertAimagee
+    def EnterRle(self, *args):
+        from pEnterRle import pEnterRle
+        self.window.destroy()
+        Page = pEnterRle()
+        Page.window.mainloop()
 
-        ConvertRimage = tk.PhotoImage(file="./Resources/Images/bConvertR.gif")
-        ConvertRimagee = ConvertRimage.subsample(3, 3)
-        ButtonToConvertRLE = tk.Button(F, image=ConvertRimagee, bg="#FFFFFF",
-                                        fg='#FFFFFF', relief=FLAT, cursor="target", command=self.Convert_rle_window)
-        ButtonToConvertRLE.place(relx=0.2, rely=0.76, anchor=CENTER)
-        ButtonToConvertRLE.image = ConvertRimagee
+    def DisplayArt(self, *args):
+        from pLoadArt import pLoadArt
+        self.window.destroy()
+        Page = pLoadArt()
+        Page.window.mainloop()
 
-        Quitimage = tk.PhotoImage(file="./Resources/Images/bExit.gif")
-        Quitimagee = Quitimage.subsample(3, 3)
-        QuitButton = tk.Button(F, image=Quitimagee, bg="#FFFFFF",
-                                fg='#FFFFFF', relief=FLAT, cursor="target", command=self.close)
-        QuitButton.place(relx=0.2, rely=0.82, anchor=CENTER)
-        QuitButton.image = Quitimagee
+    def ConvertToAscii(self, *args):
+        from pConvertToAscii import pConvertToAscii
+        self.window.destroy()
+        Page = pConvertToAscii()
+        Page.window.mainloop()
 
-        AQAimage = tk.PhotoImage(file="./Resources/Images/Author.gif")
-        AQAimagee = AQAimage.subsample(2, 2)
-        Name = tk.Button(F, image=AQAimagee, command=self.Load_About_window, text="Program By Faeq Faisal ",
-                            bg='#81D3E0', fg="#FFFFFF", font=("Segoe UI Emoji", 10), relief=FLAT, cursor="trek")
-        Name.place(relx=0.91, rely=0.98, anchor=CENTER)
-        Name.image = AQAimagee
+    def ConvertToRle(self, *args):
+        from pConvertToRle import pConvertToRle
+        self.window.destroy()
+        Page = pConvertToRle()
+        Page.window.mainloop()
 
-        image = tk.PhotoImage(file="./Resources/Images/CheckReadMeNote.gif")
-        read = tk.Label(F,image=image, background='white')
-        read.place(relx=0.28, rely=0.99, anchor=CENTER)
-        read.image = image
-
+    def About(self, *args):
+        from pAbout import pAbout
+        self.window.destroy()
+        Page = pAbout()
+        Page.window.mainloop()
 
     def close(self, *args):
         self.window.destroy()
         ClosingWindow = ExitProgram()
         ClosingWindow.window.mainloop()
-
-    def Load_RLE_window(self, *args):
-        self.window.destroy()
-        #Load_RLE_Window()
-
-    def Load_About_window(self, *args):
-        from AboutPage import AboutPage
-        self.window.destroy()
-        aboutPage = AboutPage()
-        aboutPage.window.mainloop()
-
-    def ASCII_ART_DISPLAY_window(self, *args):
-        
-        self.window.destroy()
-        
-
-    def Convert_ASCII_window(self, *args):
-        self.window.destroy()
-        #Convert_ASCII()
-
-    def Convert_rle_window(self, *args):
-        from ConvertAsciiPage import ConvertAsciiPage
-        self.window.destroy()
-        asciiPage = ConvertAsciiPage()
-        asciiPage.window.mainloop()
 
 if __name__ == "__main__":
     test = HomePage()

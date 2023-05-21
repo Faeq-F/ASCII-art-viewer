@@ -1,28 +1,3 @@
-
-"""
-                    # opens file
-                    ReadFile = open("NewDeCompressedData.txt", 'r')
-
-                    # reads file
-                    data = ReadFile.read()
-
-                    # closes file
-                    ReadFile.close()
-
-                    # message widget to show art
-                    artishere = tk.Message(ASCIIartONwindowThatIsDecompressed, text=data, font=(
-                        'Consolas', 13), fg='SteelBlue1', bg='#FFFFFF', width=90000)
-                    artishere.grid(row=8, column=8)
-
-                    # function to go back to menu
-                    def backtomenu():
-
-                        # closes window
-                        ASCIIartONwindowThatIsDecompressed.destroy()
-
-                        # runs the menu
-                        menu()
-"""
 try:
     from tkinter import *
     import tkinter as tk
@@ -32,19 +7,31 @@ except ImportError:
 
 from Components import window, canvas, frame, button, center, Page
 
-class ArtPage(Page):
+class pConvertToRle(Page):
     def __init__(self, *args):
         Page.__init__(self)
 
         C = Canvas(self.window)
-        background = PhotoImage(file="./Resources/Images/pArt.gif")
+        background = PhotoImage(file="./Resources/Images/pConvertToRLE.gif")
         background_label = Label(self.window, image=background)
         background_label.place(x=0, y=0, relwidth=1, relheight=1)
         C.pack()
         C.img = background
 
         F = frame(self.window)
-        
+
+        # text entry field
+        imag = tk.PhotoImage(file="./Resources/Images/EntryField.gif")
+        # sizing image to window size
+        imagee = imag.subsample(3, 3)
+        s = tk.Label(F, borderwidth=1, image=imagee, bg='#FFFFFF')
+        s.place(relx=0.5, rely=0.5, anchor=CENTER)
+        s.image = imagee
+
+        # entry field
+        entry = tk.Entry(F, width=20, bg='#FFFFFF', relief='flat', font=(
+            'Consolas', 18), fg='SteelBlue1')
+        entry.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         # creates enter rle button
         backimage = PhotoImage(file=self.ImageDir+"\\bBack.gif")
@@ -57,8 +44,6 @@ class ArtPage(Page):
         Button.place(relx=0.5, rely=0.9, anchor=CENTER)
         Button.image = backimagee
 
-    
-
 if __name__ == "__main__":
-    test = ArtPage()
+    test = pConvertToRle()
     test.window.mainloop()

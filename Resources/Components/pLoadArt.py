@@ -7,7 +7,7 @@ except ImportError:
 
 from Components import window, canvas, frame, button, center, Page
 
-class LoadArtPage(Page):
+class pLoadArt(Page):
     def __init__(self, *args):
         Page.__init__(self)
 
@@ -38,7 +38,7 @@ class LoadArtPage(Page):
         #entry field
         e = tk.Entry(frame2,width = 20,bg = '#FFFFFF',relief = 'flat',font=('Consolas',18), fg = 'SteelBlue1')
         e.grid(column = 2, row = 5)
-               
+
         # create a frame and pack it
         frame1 = tk.Frame(display,bg='#FFFFFF',padx=15)
         frame1.grid(sticky=tk.W)

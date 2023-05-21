@@ -5,10 +5,9 @@ except ImportError:
     from Tkinter import *
     import Tkinter as tk
 
-from Components import window, canvas, frame, button, center
-from HomePage import Page
+from Components import window, canvas, frame, button, center, Page
 
-class AboutPage(Page):
+class pAbout(Page):
     def __init__(self, *args):
         Page.__init__(self)
 
@@ -34,5 +33,5 @@ class AboutPage(Page):
         Button.image = backimagee
     
 if __name__ == "__main__":
-  test = AboutPage()
+  test = pAbout()
   test.window.mainloop()
