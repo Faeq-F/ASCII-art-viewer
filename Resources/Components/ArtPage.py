@@ -30,8 +30,7 @@ except ImportError:
     from Tkinter import *
     import Tkinter as tk
 
-from Components import window, canvas, frame, button, center
-from HomePage import Page
+from Components import window, canvas, frame, button, center, Page
 
 class ArtPage(Page):
     def __init__(self, *args):

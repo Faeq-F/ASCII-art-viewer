@@ -1,11 +1,11 @@
 try:
     from tkinter import *
     import tkinter as tk
-    import tkinter.ttk as ttk
 except ImportError:
     from Tkinter import *
     import Tkinter as tk
-    import ttk
+
+import pathlib, os
 
 """
   centers all windows on-screen
@@ -73,6 +73,17 @@ class window:
         ClosingWindow.window.mainloop()
         self.__init__(self)
 
+class Page(window):
+  def __init__(self, *args):
+        window.__init__(self)
+        self.ImageDir = str(pathlib.Path(__file__).parent.resolve())
+        self.ImageDir = self.ImageDir.replace("Components", "Images")
+
+  def BackToMenu(self, *args):
+    from HomePage import HomePage
+    self.window.destroy()
+    Home = HomePage()
+    Home.window.mainloop()
 
 def canvas(window, image):
     C = Canvas(window)

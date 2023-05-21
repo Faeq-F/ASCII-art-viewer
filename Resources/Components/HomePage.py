@@ -7,21 +7,6 @@ except ImportError:
 
 from Components import window, canvas, frame, button, center
 
-import pathlib, os
-
-
-class Page(window):
-  def __init__(self, *args):
-        window.__init__(self)
-        self.ImageDir = str(pathlib.Path(__file__).parent.resolve())
-        self.ImageDir = self.ImageDir.replace("Components", "Images")
-
-  def BackToMenu(self, *args):
-    self.window.destroy()
-    Home = HomePage()
-    Home.window.mainloop()
-    
-
 class ExitProgram():
     def __init__(self, *args):
         self.window = tk.Tk()
