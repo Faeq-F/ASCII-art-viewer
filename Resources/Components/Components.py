@@ -25,6 +25,9 @@ class window:
     self.window.protocol("WM_DELETE_WINDOW", self.close)
     center(self.window)
 
+  """
+    Method to move to the noClosingPage
+  """
   def close(self, *args):
     self.window.destroy()
     ClosingWindow = noClose()
@@ -38,9 +41,12 @@ class window:
 class Page(window):
   def __init__(self, *args):
     window.__init__(self)
-    self.ImageDir = str(pathlib.Path(__file__).parent.resolve())
-    self.ImageDir = self.ImageDir.replace("Components", "Images")
+    #self.ImageDir = str(pathlib.Path(__file__).parent.resolve())
+    #self.ImageDir = self.ImageDir.replace("Components", "Images")
 
+  """
+    Method to move from the page, back to the menu
+  """
   def BackToMenu(self, *args):
     from HomePage import HomePage
     self.window.destroy()
@@ -57,7 +63,7 @@ class noClose(window):
     self.window.title("Please use the menu exit")
     C = canvas(self.window, "./Resources/Images/pNoClosing.gif")
     F = frame(self.window)
-    B = button(F, "./Resources/Images/bBack.gif", 2, self.window.destroy, "left", 3, 0, "s")
+    B = button(F, "./Resources/Images/bBack.gif", 3, self.window.destroy, 0.25, 0.8)
 
 
 """
@@ -101,6 +107,32 @@ def button(frame, image, subsample, command, x, y):
   Button.place(relx=x, rely=y, anchor=CENTER)
   Button.image = Image
   return Button
+
+"""
+  EntryField for typing in filenames, etc.
+  :param frame: The frame to place the field on
+  :param x: The relx placement of the field
+  :param y: The rely placement of the field
+  :return: The field created
+"""
+def entryField(frame, x, y):
+  #entry field image
+  image = tk.PhotoImage(file="./Resources/Images/EntryField.gif").subsample(3, 3)
+  imageLabel = tk.Label(frame, borderwidth=1, image=image, bg = '#FFFFFF')
+  imageLabel.place(relx=x, rely=y, anchor=CENTER)
+  imageLabel.image = image
+
+  #entry field widget
+  entry = tk.Entry(frame,width = 20,bg = '#FFFFFF',relief = 'flat',font=('Consolas',18), fg = 'SteelBlue1')
+  entry.place(relx=x, rely=y, anchor=CENTER)
+  return entry
+
+"""
+"""
+def divider(frame, x, y):
+  divider = Label(frame, text="_____________________________________________________________________",bg="#FFFFFF",fg='SteelBlue1')
+  divider.place(relx=x, rely=y, anchor=CENTER)
+  return divider
 
 
 """

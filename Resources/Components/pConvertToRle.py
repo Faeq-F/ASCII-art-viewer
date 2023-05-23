@@ -1,9 +1,9 @@
 try:
-    from tkinter import *
-    import tkinter as tk
+  from tkinter import *
+  import tkinter as tk
 except ImportError:
-    from Tkinter import *
-    import Tkinter as tk
+  from Tkinter import *
+  import Tkinter as tk
 
 from Components import window, canvas, frame, button, center, Page
 
@@ -29,8 +29,7 @@ class pConvertToRle(Page):
         s.image = imagee
 
         # entry field
-        entry = tk.Entry(F, width=20, bg='#FFFFFF', relief='flat', font=(
-            'Consolas', 18), fg='SteelBlue1')
+        entry = tk.Entry(F, width=20, bg='#FFFFFF', relief='flat', font=('Consolas', 18), fg='SteelBlue1')
         entry.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         # creates enter rle button

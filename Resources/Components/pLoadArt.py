@@ -1,101 +1,69 @@
-try:
-    from tkinter import *
-    import tkinter as tk
-except ImportError:
-    from Tkinter import *
-    import Tkinter as tk
+from Components import canvas, frame, button, entryField, divider, Page
+import os
 
-from Components import window, canvas, frame, button, center, Page
-
+"""
+  The LoadArt Page (2nd menu option)
+"""
 class pLoadArt(Page):
-    def __init__(self, *args):
-        Page.__init__(self)
+  def __init__(self, *args):
+    Page.__init__(self)
+    self.Filename = ""
+    canvas(self.window, "./Resources/Images/pLoadArt.gif")
+    F = frame(self.window)
+    self.E = entryField(F, 0.24, 0.42)
+    button(F, "./Resources/Images/bContinue.gif", 3, self.displayArt, 0.23, 0.51)
+    divider(F, 0.2, 0.59)
+    button(F, "./Resources/Images/bBrowseFile.gif", 2, self.browse, 0.23, 0.69)
+    divider(F, 0.2, 0.79)
+    button(F, "./Resources/Images/bBack.gif", 5, self.BackToMenu, 0.23, 0.89)
 
-        C = Canvas(self.window)
-        background = PhotoImage(file="./Resources/Images/pLoadArt.gif")
-        background_label = Label(self.window, image=background)
-        background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        C.pack()
-        C.img = background
+  """
+  Method to allow the user to browse for their art
+  """
+  def browse(self, *args):
+    try:
+        from tkinter import filedialog
+    except:
+        from Tkinter import tkFileDialog as filedialog
+    self.Filename =  filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
+    self.displayArt()
 
-        F = frame(self.window)
+  """
+    Method to display the user's art
+  """
+  def displayArt(self, *args):
+    
+    if self.Filename == "":
+      self.Filename = self.E.get()
 
-        #text entry field
-        imag = tk.PhotoImage(file="entry.gif")
-        
-        # create a frame and pack it
-        frame2 = tk.Frame(display,bg='#FFFFFF',padx=15)
-        frame2.grid()
+    if not (self.Filename.lower().endswith(('.txt'))):
+      self.Filename = self.Filename +'.txt'
+    
+    if os.path.exists("./Resources/Data/"+self.Filename) == True:
+      ReadFile = open("./Resources/Data/"+self.Filename,'r')
+      data = ReadFile.read()
+      ReadFile.close()
 
-        #sizing image
-        imagee = imag.subsample(3, 3)
-        s = tk.Label(frame2, borderwidth=1, image=imagee, bg = '#FFFFFF')
+      from pArt import pArt
+      self.window.destroy()
+      Page = pArt(data)
+      Page.window.mainloop()
+    elif os.path.exists(self.Filename) == True:
+      ReadFile = open(self.Filename,'r')
+      data = ReadFile.read()
+      ReadFile.close()
 
-        #reference
-        s.grid(column = 2, row = 5)
-        s.image = imagee
+      from pArt import pArt
+      self.window.destroy()
+      Page = pArt(data)
+      Page.window.mainloop()
+    else:
+      from pError import pErrorNoFile
+      self.window.destroy()
+      Page = pErrorNoFile()
+      Page.window.mainloop()
+      self.__init__(self)
 
-        #entry field
-        e = tk.Entry(frame2,width = 20,bg = '#FFFFFF',relief = 'flat',font=('Consolas',18), fg = 'SteelBlue1')
-        e.grid(column = 2, row = 5)
-
-        # create a frame and pack it
-        frame1 = tk.Frame(display,bg='#FFFFFF',padx=15)
-        frame1.grid(sticky=tk.W)
-
-        #creates empty space between widgets
-        emptyspace = Label(frame1, text="_____________________________________________________________________",bg="#FFFFFF",fg='SteelBlue1')
-        emptyspace.grid()
-        
-        #creates enter rle button
-        image = tk.PhotoImage(file="C.gif")
-        
-        #resizes background image
-        imagee = image.subsample(3, 3)
-        ButtonToEnter = tk.Button(frame1, relief=FLAT, image=imagee, command =displayArt,bg="#FFFFFF",fg='#FFFFFF',cursor = "target")
-
-        #places button on bg
-        ButtonToEnter.grid(sticky=tk.W)
-        ButtonToEnter.image = imagee
-        
-
-    #       -----------------------------------------------------
-        
-        #loads button
-        #imports file dialog to allow the user to brows for their art
-        try:
-            from tkinter import filedialog
-        except:
-            from Tkinter import tkFileDialog
-
-        #There were a couple of methods here that need to be implemented
-        
-        #creates enter button
-        image = tk.PhotoImage(file="BfF.gif")
-        
-        #resizes background image
-        imagee = image.subsample(2, 2)
-        ButtonToEnter = tk.Button(frame1, relief=FLAT, image=imagee, command =browse,bg="#FFFFFF",fg='#FFFFFF',cursor = "target")
-        
-        ButtonToEnter.grid(sticky=tk.W)
-        ButtonToEnter.image = imagee
-
-#creates enter button
-        image = tk.PhotoImage(file="Back.gif")
-        
-        #resizes background image
-        imagee = image.subsample(5, 5)
-        ButtonToEnter = tk.Button(frame1, relief=FLAT, image=imagee, command =exit_this_displayer,bg="#FFFFFF",fg='#FFFFFF',cursor = "target")
-
-        #places button on bg
-        ButtonToEnter.grid(sticky=tk.W)
-        ButtonToEnter.image = imagee
-        
-        #size of window
-        display.geometry("724x592")
-        
-        #cant resize window
-        display.resizable(width=False, height=False)
-        
-        #centers window
-        center(display)
+if __name__ == "__main__":
+  test = pLoadArt()
+  test.window.mainloop()
