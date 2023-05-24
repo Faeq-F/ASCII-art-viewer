@@ -39,30 +39,25 @@ class pLoadArt(Page):
     if not (self.Filename.lower().endswith(('.txt'))):
       self.Filename = self.Filename +'.txt'
     
-    if os.path.exists("./Resources/Data/"+self.Filename) == True:
-      ReadFile = open("./Resources/Data/"+self.Filename,'r')
-      data = ReadFile.read()
-      ReadFile.close()
+    if os.path.exists("./Resources/Data/" + self.Filename) == True:
+      self.Filename = "./Resources/Data/" + self.Filename
 
-      from pArt import pArt
-      self.window.destroy()
-      Page = pArt(data)
-      Page.window.mainloop()
-    elif os.path.exists(self.Filename) == True:
-      ReadFile = open(self.Filename,'r')
-      data = ReadFile.read()
-      ReadFile.close()
-
-      from pArt import pArt
-      self.window.destroy()
-      Page = pArt(data)
-      Page.window.mainloop()
-    else:
+    elif not (os.path.exists(self.Filename) == True):
       from pError import pErrorNoFile
       self.window.destroy()
       Page = pErrorNoFile()
       Page.window.mainloop()
       self.__init__(self)
+      return
+
+    ReadFile = open(self.Filename,'r')
+    data = ReadFile.read()
+    ReadFile.close()
+
+    from pArt import pArt
+    self.window.destroy()
+    Page = pArt(data)
+    Page.window.mainloop()
 
 if __name__ == "__main__":
   test = pLoadArt()
