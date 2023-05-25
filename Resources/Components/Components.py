@@ -128,6 +128,11 @@ def entryField(frame, x, y):
   return entry
 
 """
+  Divider for widgets on a window
+  :param frame: The frame to place the divider on
+  :param x: the relx placement of the divider
+  :param y: the rely placement of the divider
+  :return: the divider created
 """
 def divider(frame, x, y):
   divider = Label(frame, text="_____________________________________________________________________",bg="#FFFFFF",fg='SteelBlue1')
@@ -152,10 +157,30 @@ class integersOnly(tk.Entry):
   Checks that the field only contains numbers
   """
   def check(self, *args):
-    if self.get().isdigit():
+    if self.get().isdigit() or self.get()=="":
       self.old_value = self.get()
     else:
       self.set(self.old_value)  # rejects change and reverts
+
+
+"""
+  integersOnly EntryField
+  :param frame: The frame to place the field on
+  :param x: The relx placement of the field
+  :param y: The rely placement of the field
+  :return: The field created
+"""
+def integersOnlyEntryField(frame, x, y):
+  #entry field image
+  image = tk.PhotoImage(file="./Resources/Images/EntryField.gif").subsample(3, 3)
+  imageLabel = tk.Label(frame, borderwidth=1, image=image, bg = '#FFFFFF')
+  imageLabel.place(relx=x, rely=y, anchor=CENTER)
+  imageLabel.image = image
+
+  #entry field widget
+  entry = integersOnly(frame,width = 20,bg = '#FFFFFF',relief = 'flat',font=('Consolas',18), fg = 'SteelBlue1')
+  entry.place(relx=x, rely=y, anchor=CENTER)
+  return entry
 
 
 """
