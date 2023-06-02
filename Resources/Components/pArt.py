@@ -6,7 +6,7 @@ except ImportError:
     import Tkinter as tk
 
 
-from Components import window, canvas, frame, button, center, Page
+from Components import canvas, frame, button, Page
 
 
 """
@@ -15,27 +15,13 @@ from Components import window, canvas, frame, button, center, Page
 class pArt(Page):
   def __init__(self, data, *args):
     Page.__init__(self)
-
-    C = Canvas(self.window)
-    background = PhotoImage(file="./Resources/Images/pArt.gif")
-    background_label = Label(self.window, image=background)
-    background_label.place(x=0, y=0, relwidth=1, relheight=1)
-    C.pack()
-    C.img = background
-
+    canvas(self.window, "./Resources/Images/pArt.gif")
     F = frame(self.window)
     
     artishere = tk.Message(F, text=data, font=('Consolas',13), fg = 'SteelBlue1', bg = '#FFFFFF',width = 90000)
     artishere.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-    # creates enter rle button
-    backimage = PhotoImage(file="./Resources/Images/bBack.gif")
-    backimagee = backimage.subsample(4, 4)
-    Button = tk.Button(F, relief='flat', image=backimagee,command=self.BackToMenu, bg="#FFFFFF", fg='#FFFFFF', cursor="target")
-
-    # places button on window
-    Button.place(relx=0.52, rely=0.94, anchor=CENTER)
-    Button.image = backimagee
+    button(F, "./Resources/Images/bBack.gif", 5, self.BackToMenu, 0.52, 0.94)
 
 
 if __name__ == "__main__":

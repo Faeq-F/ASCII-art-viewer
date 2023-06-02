@@ -5,43 +5,115 @@ except ImportError:
   from Tkinter import *
   import Tkinter as tk
 
-from Components import window, canvas, frame, button, center, Page
+import os
+from itertools import groupby
+
+from Components import canvas, frame, button, Page, entryField, divider, noClose
 
 class pConvertToRle(Page):
-    def __init__(self, *args):
-        Page.__init__(self)
+  def __init__(self, *args):
+    Page.__init__(self)
+    self.Filename = ""
+    canvas(self.window, "./Resources/Images/pConvertToRLE.gif")
+    F = frame(self.window)
+    self.E = entryField(F, 0.24, 0.42)
+    button(F, "./Resources/Images/bContinue.gif", 3, self.displayResults, 0.23, 0.51)
+    divider(F, 0.2, 0.59)
+    button(F, "./Resources/Images/bBrowseFile.gif", 2, self.browse, 0.23, 0.69)
+    divider(F, 0.2, 0.79)
+    button(F, "./Resources/Images/bBack.gif", 5, self.BackToMenu, 0.23, 0.89)
 
-        C = Canvas(self.window)
-        background = PhotoImage(file="./Resources/Images/pConvertToRLE.gif")
-        background_label = Label(self.window, image=background)
-        background_label.place(x=0, y=0, relwidth=1, relheight=1)
-        C.pack()
-        C.img = background
+  """
+  Method to allow the user to browse for their art
+  """
+  def browse(self, *args):
+    try:
+        from tkinter import filedialog
+    except:
+        from Tkinter import tkFileDialog as filedialog
+    self.Filename =  filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
+    self.displayResults()
 
-        F = frame(self.window)
+  """
+    Method to display the results of the compression
+  """
+  def displayResults(self, *args):
+    
+    if self.Filename == "":
+      self.Filename = self.E.get()
 
-        # text entry field
-        imag = tk.PhotoImage(file="./Resources/Images/EntryField.gif")
-        # sizing image to window size
-        imagee = imag.subsample(3, 3)
-        s = tk.Label(F, borderwidth=1, image=imagee, bg='#FFFFFF')
-        s.place(relx=0.5, rely=0.5, anchor=CENTER)
-        s.image = imagee
+    if not (self.Filename.lower().endswith(('.txt'))):
+      self.Filename = self.Filename +'.txt'
+    
+    if os.path.exists("./Resources/Data/" + self.Filename) == True:
+      self.Filename = "./Resources/Data/" + self.Filename
 
-        # entry field
-        entry = tk.Entry(F, width=20, bg='#FFFFFF', relief='flat', font=('Consolas', 18), fg='SteelBlue1')
-        entry.place(relx=0.5, rely=0.5, anchor=CENTER)
+    elif not (os.path.exists(self.Filename) == True):
+      from pError import pErrorNoFile
+      self.window.destroy()
+      Page = pErrorNoFile()
+      Page.window.mainloop()
+      self.__init__(self)
+      return
+    
+    open("./Resources/Data/NewEncodedData.txt","w").close() #Erase the file
 
-        # creates enter rle button
-        backimage = PhotoImage(file=self.ImageDir+"\\bBack.gif")
+    WriteToFile = open("./Resources/Data/NewEncodedData.txt","a")
+    with open(self.Filename) as FileToConvert:
+      for line in FileToConvert:
+        line = line.replace("\n","")
+        #encoding
+        partners = [(len(list(a)), b) for b, a in groupby(line)]
+        endline = (''.join("%02d%s" % (c, d) for c, d in partners)) + '\n'
+        WriteToFile.write(endline)
+    WriteToFile.close
 
-        # resizes background image
-        backimagee = backimage.subsample(3, 3)
-        Button = tk.Button(F, relief='flat', image=backimagee,command=self.BackToMenu, bg="#FFFFFF", fg='#FFFFFF', cursor="target")
+    #reading new file and calculating characters
+    CharCount = open("./Resources/Data/NewEncodedData.txt", 'r')
+    NewCharacters = 0
+    for line in CharCount:
+      NewCharacters = NewCharacters + len(line)
 
-        # places button on window
-        Button.place(relx=0.5, rely=0.9, anchor=CENTER)
-        Button.image = backimagee
+    #reading old file and calculating characters
+    CharCount = open(self.Filename, 'r')
+    OldCharacters = 0
+    for line in CharCount:
+      OldCharacters = OldCharacters + len(line)
+
+    #difference
+    dif = str(OldCharacters-NewCharacters)
+
+    Page = pRes(OldCharacters, NewCharacters, dif)
+    self.window.destroy()
+    Page.window.mainloop()
+
+
+"""
+  Page that displays the user's results
+"""
+class pRes(Page):
+  def __init__(self, old, new, dif, *args):
+    self.old = old
+    self.new = new
+    self.dif = dif
+    Page.__init__(self)
+    canvas(self.window, "./Resources/Images/pResults.gif")
+    F = frame(self.window)
+    
+    tk.Label(F, text= old, bg = '#FFFFFF', fg = 'SteelBlue1').place(relx=0.5, rely=0.3, anchor=CENTER)
+    tk.Label(F, text= new, bg = '#FFFFFF', fg = 'SteelBlue1').place(relx=0.5, rely=0.6, anchor=CENTER)
+    tk.Label(F, text= dif, bg = '#FFFFFF', fg = 'SteelBlue1').place(relx=0.5, rely=0.8, anchor=CENTER)
+    button(F, "./Resources/Images/bBack.gif", 5, self.BackToMenu, 0.52, 0.94)
+
+  """
+    Method to move to the noClosingPage
+  """
+  def close(self, *args):
+    self.window.destroy()
+    ClosingWindow = noClose()
+    ClosingWindow.window.mainloop()
+    self.__init__(self, self.old, self.new, self.dif)
+
 
 if __name__ == "__main__":
     test = pConvertToRle()

@@ -74,7 +74,7 @@ class noClose(window):
 """
 def canvas(window, image):
   C = Canvas(window)
-  backg = PhotoImage(file=image)
+  backg = PhotoImage(file=image, master=window)
   background_label = Label(window, image=backg)
   background_label.place(x=0, y=0, relwidth=1, relheight=1)
   C.pack()
