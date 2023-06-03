@@ -10,12 +10,12 @@ class pLoadArt(Page):
     self.Filename = ""
     canvas(self.window, "./Resources/Images/pLoadArt.gif")
     F = frame(self.window)
-    self.E = entryField(F, 0.24, 0.42)
-    button(F, "./Resources/Images/bContinue.gif", 3, self.displayArt, 0.23, 0.51)
-    divider(F, 0.2, 0.59)
-    button(F, "./Resources/Images/bBrowseFile.gif", 2, self.browse, 0.23, 0.69)
-    divider(F, 0.2, 0.79)
-    button(F, "./Resources/Images/bBack.gif", 5, self.BackToMenu, 0.23, 0.89)
+    self.E = entryField(F, 0.21, 0.32)
+    button(F, "./Resources/Images/bContinue.gif", 3, self.displayArt, 0.2, 0.41)
+    divider(F, 0.2, 0.48)
+    button(F, "./Resources/Images/bBrowseFile.gif", 2, self.browse, 0.2, 0.65)
+    divider(F, 0.2, 0.77)
+    button(F, "./Resources/Images/bBack.gif", 5, self.BackToMenu, 0.2, 0.89)
 
   """
   Method to allow the user to browse for their art

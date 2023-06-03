@@ -20,19 +20,20 @@ class pConvertToAscii(Page):
   """
   Method to allow the user to browse for their art
   """
+  @Filename.setter
   def browse(self, *args):
     try:
         from tkinter import filedialog
     except:
         from Tkinter import tkFileDialog as filedialog
-    self.Filename =  filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
+    self.__filename =  filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
     self.displayArt()
 
   """
     Method to display the user's art
   """
   def displayArt(self, *args):
-    
+    self.window.destroy()
     if self.Filename == "":
       self.Filename = self.E.get()
 
@@ -42,33 +43,32 @@ class pConvertToAscii(Page):
     if os.path.exists("./Resources/Data/" + self.Filename) == True:
       self.Filename = "./Resources/Data/" + self.Filename
 
-    elif not (os.path.exists(self.Filename) == True):
+    elif os.path.exists(self.Filename) == True:
+      open("./Resources/Data/NewDecodedArt.txt","w").close() #Erase the file
+      WriteToFile = open("./Resources/Data/NewDecodedArt.txt","a")
+      with open(self.Filename) as EncodedFile:
+        for line in EncodedFile:
+          line = line.replace("\n","")
+          #decoding
+          pairs = [(int(line[i:i+2]),line[i+2]) for i in range(0,len(line),3)]
+          decodedString = (''.join(n * c for n, c in pairs)) + "\n"
+          WriteToFile.write(decodedString)
+      WriteToFile.close
+
+      ReadFile = open("./Resources/Data/NewDecodedArt.txt",'r')
+      rdrata = ReadFile.read()
+      ReadFile.close()
+      print(rdrata)
+      from pArt import pArt
+      Page = pArt(rdrata)
+      ReadFile.close()
+      Page.window.mainloop()
+    else:
       from pError import pErrorNoFile
-      self.window.destroy()
       Page = pErrorNoFile()
       Page.window.mainloop()
       self.__init__(self)
       return
-    
-    open("./Resources/Data/NewDecodedArt.txt","w").close() #Erase the file
-    WriteToFile = open("./Resources/Data/NewDecodedArt.txt","a")
-    with open(self.Filename) as EncodedFile:
-      for line in EncodedFile:
-        line = line.replace("\n","")
-        #decoding
-        pairs = [(int(line[i:i+2]),line[i+2]) for i in range(0,len(line),3)]
-        decodedString = (''.join(n * c for n, c in pairs)) + "\n"
-        WriteToFile.write(decodedString)
-    WriteToFile.close
-
-    ReadFile = open("./Resources/Data/NewDecodedArt.txt",'r')
-    data = ReadFile.read()
-    ReadFile.close()
-
-    from pArt import pArt
-    Page = pArt(data)
-    self.window.destroy()
-    Page.window.mainloop()
 
 if __name__ == "__main__":
   test = pConvertToAscii()

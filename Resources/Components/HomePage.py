@@ -43,7 +43,7 @@ class HomePage(window):
     
     AuthorImage = tk.PhotoImage(file="./Resources/Images/Author.gif").subsample(2, 2)
     AuthorButton = tk.Button(F, image=AuthorImage, command=self.About,
-        text="Program By Faeq Faisal ", bg='#81D3E0', fg="#FFFFFF",
+        text="Program By Faeq Faisal ", bg='#80d8df', fg="#FFFFFF",
         font=("Segoe UI Emoji", 10), relief=FLAT, cursor="trek")
     AuthorButton.place(relx=0.91, rely=0.98, anchor=CENTER)
     AuthorButton.image = AuthorImage
