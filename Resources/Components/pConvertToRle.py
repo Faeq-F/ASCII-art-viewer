@@ -38,6 +38,7 @@ class pConvertToRle(Page):
     Method to display the results of the compression
   """
   def displayResults(self, *args):
+    self.window.destroy()
     
     if self.Filename == "":
       self.Filename = self.E.get()
@@ -50,7 +51,6 @@ class pConvertToRle(Page):
 
     elif not (os.path.exists(self.Filename) == True):
       from pError import pErrorNoFile
-      self.window.destroy()
       Page = pErrorNoFile()
       Page.window.mainloop()
       self.__init__(self)
@@ -66,13 +66,8 @@ class pConvertToRle(Page):
         partners = [(len(list(a)), b) for b, a in groupby(line)]
         endline = (''.join("%02d%s" % (c, d) for c, d in partners)) + '\n'
         WriteToFile.write(endline)
+        WriteToFile.flush()
     WriteToFile.close
-
-    #reading new file and calculating characters
-    CharCount = open("./Resources/Data/NewEncodedData.txt", 'r')
-    NewCharacters = 0
-    for line in CharCount:
-      NewCharacters = NewCharacters + len(line)
 
     #reading old file and calculating characters
     CharCount = open(self.Filename, 'r')
@@ -80,11 +75,16 @@ class pConvertToRle(Page):
     for line in CharCount:
       OldCharacters = OldCharacters + len(line)
 
+    #reading new file and calculating characters
+    NewCharacters = 0
+    with open(self.ResDir + r"Data\NewEncodedData.txt") as myfile:
+      for line in myfile:
+        NewCharacters = NewCharacters + len(line)
+
     #difference
     dif = str(OldCharacters-NewCharacters)
 
     Page = pRes(OldCharacters, NewCharacters, dif)
-    self.window.destroy()
     Page.window.mainloop()
 
 

@@ -41,8 +41,7 @@ class window:
 class Page(window):
   def __init__(self, *args):
     window.__init__(self)
-    #self.ImageDir = str(pathlib.Path(__file__).parent.resolve())
-    #self.ImageDir = self.ImageDir.replace("Components", "Images")
+    self.ResDir = str(pathlib.Path(__file__).parent.resolve()).replace("Components", "")
 
   """
     Method to move from the page, back to the menu
@@ -197,5 +196,6 @@ def center(Tk):
 
 
 if __name__ == "__main__":
+  print(str(pathlib.Path(__file__).parent.resolve()).replace("Components", ""))
   test = window("775x592")
   test.window.mainloop()

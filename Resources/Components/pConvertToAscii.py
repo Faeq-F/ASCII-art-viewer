@@ -20,13 +20,13 @@ class pConvertToAscii(Page):
   """
   Method to allow the user to browse for their art
   """
-  @Filename.setter
+  #@Filename.setter
   def browse(self, *args):
     try:
         from tkinter import filedialog
     except:
         from Tkinter import tkFileDialog as filedialog
-    self.__filename =  filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
+    self.Filename =  filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
     self.displayArt()
 
   """
@@ -53,12 +53,13 @@ class pConvertToAscii(Page):
           pairs = [(int(line[i:i+2]),line[i+2]) for i in range(0,len(line),3)]
           decodedString = (''.join(n * c for n, c in pairs)) + "\n"
           WriteToFile.write(decodedString)
+          WriteToFile.flush()
       WriteToFile.close
 
       ReadFile = open("./Resources/Data/NewDecodedArt.txt",'r')
       rdrata = ReadFile.read()
       ReadFile.close()
-      print(rdrata)
+      
       from pArt import pArt
       Page = pArt(rdrata)
       ReadFile.close()
